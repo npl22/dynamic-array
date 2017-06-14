@@ -66,7 +66,7 @@ describe RingBuffer do
 
   it "correctly handles pushes/pops/shifts/unshifts after resizing" do
     arr = RingBuffer.new
-
+    
     5.times do |i|
       arr.push(i)
       arr.unshift(i)

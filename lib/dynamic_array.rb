@@ -75,9 +75,7 @@ class DynamicArray
   def resize!
     @capacity *= 2
     new_store = StaticArray.new(@capacity)
-    (0...@length-1).each do |i|
-      new_store[i] = self[i]
-    end
+    @length.times { |i| new_store[i] = self[i] }
     @store = new_store
   end
 end

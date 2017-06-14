@@ -38,8 +38,8 @@ class RingBuffer
 
   # O(1) ammortized
   def push(val)
+    resize! if @length == @capacity
     @length += 1
-    resize! if @length > @capacity
     self[@length - 1] = val
   end
 
@@ -47,16 +47,16 @@ class RingBuffer
   def shift
     raise 'index out of bounds' if @length.zero?
     shifted_el, self[0] = self[0], nil
-    @start_idx += 1
+    @start_idx = (@start_idx + 1) % @capacity
     @length -= 1
     shifted_el
   end
 
   # O(1) ammortized
   def unshift(val)
+    resize! if @length == @capacity
     @length += 1
-    resize! if @length > @capacity
-    @start_idx -= 1
+    @start_idx = (@start_idx - 1) % @capacity
     self[0] = val
   end
 
@@ -69,12 +69,17 @@ class RingBuffer
   end
 
   def resize!
-    @capacity *= 2
-    new_store = StaticArray.new(@capacity)
-    @start_idx = 0
-    (0...@length-1).each do |i|
-      new_store[i] = self[i]
-    end
+    # This is wrong, you are modifying capacity which is used in your
+    # bracket methods
+    # @capacity *= 2
+    # new_store = StaticArray.new(@capacity)
+    # Key: be careful when changing class variables because they are typically used in other methods
+    new_capacity = @capacity * 2
+    new_store = StaticArray.new(new_capacity)
+    @length.times { |i| new_store[i] = self[i] }
+    
     @store = new_store
+    @capacity = new_capacity
+    @start_idx = 0
   end
 end
