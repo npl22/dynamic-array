@@ -1,18 +1,3 @@
-# Implement a queue with #enqueue and #dequeue, as well as a #max API,
-# a method which returns the maximum element still in the queue. This
-# is trivial to do by spending O(n) time upon dequeuing.
-# Can you do it in O(1) amortized? Maybe use an auxiliary storage structure?
-
-# Use your RingBuffer to achieve optimal shifts! Write any additional
-# methods you need.
-
-# Goal, you want to know what the maximum value of the queue at all times
-# two instances of a ring buffer, one for the queue, one for the max
-# q = QueueWithMax
-# q.max --> max in O(1) time instead of arr.max which is O(n) time
-
-# enqueue onto the Queue, don't enqueue but push onto the maxqueueue
-
 require_relative 'ring_buffer'
 
 class QueueWithMax
@@ -49,3 +34,15 @@ class QueueWithMax
     @store.length
   end
 end
+
+# Goal, you want to know what the maximum value of the queue at all times
+# two instances of a ring buffer, one for the queue, one for the max
+# q = QueueWithMax
+# q.max --> max in O(1) time instead of arr.max which is O(n) time
+
+# dequeueing is easy, enqueueing can be constant time amortized, once
+# you get a new max, pop off all of the numbers less than the max and
+# then push it into the maxqueue. This way the max will always be the
+# first element and you can look it up in constant time. This is O(1)
+# amortized because you only pop in O(n) when you get a new max. Pushes
+# with numbers less than the current max are "free"

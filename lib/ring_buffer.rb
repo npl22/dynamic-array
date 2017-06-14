@@ -1,9 +1,5 @@
 require_relative "static_array"
 
-
-# you don't have to mod again since you put it in your bracket method
-
-# mod by capacity instead of length?
 class RingBuffer
   attr_reader :length
 
@@ -60,7 +56,7 @@ class RingBuffer
     self[0] = val
   end
 
-  # protected
+  protected
   attr_accessor :capacity, :start_idx, :store
   attr_writer :length
 
@@ -74,12 +70,16 @@ class RingBuffer
     # @capacity *= 2
     # new_store = StaticArray.new(@capacity)
     # Key: be careful when changing class variables because they are typically used in other methods
+
     new_capacity = @capacity * 2
     new_store = StaticArray.new(new_capacity)
     @length.times { |i| new_store[i] = self[i] }
-    
+
     @store = new_store
     @capacity = new_capacity
     @start_idx = 0
   end
 end
+
+# You don't have to mod again since you put it in your bracket method
+# mod by capacity instead of length

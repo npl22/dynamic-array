@@ -63,7 +63,7 @@ class DynamicArray
     @store[0] = val
   end
 
-  # protected
+  protected
   attr_accessor :capacity, :store
   attr_writer :length
 
