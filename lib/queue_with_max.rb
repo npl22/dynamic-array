@@ -11,12 +11,12 @@
 # q = QueueWithMax
 # q.max --> max in O(1) time instead of arr.max which is O(n) time
 
-# enqueue onto the Queue, don't enqueue but push onto the MaxQueue
+# enqueue onto the Queue, don't enqueue but push onto the maxqueueue
 
 require_relative 'ring_buffer'
 
 class QueueWithMax
-  attr_accessor :store
+  attr_accessor :store, :maxqueue
 
   def initialize
     @store = RingBuffer.new
@@ -24,19 +24,28 @@ class QueueWithMax
   end
 
   # Only 2 pushes, so it's constant, not with respect to O(n)
-  def enqueue(val)
-    @store.push(val)
+  def enqueue(el)
+    @maxqueue.push(el) if @maxqueue.length.zero?
+
+    @store.push(el)
+    while @maxqueue[0] < el
+      @maxqueue.pop
+      break if @maxqueue.length.zero?
+    end
+    @maxqueue.push(el)
   end
 
   def dequeue
-    @store.pop
+    val = @store.shift
+    @maxqueue.shift if val == @maxqueue[0]
+    val
   end
 
   def max
+    @maxqueue[0]
   end
 
   def length
-    @length = @store.length
+    @store.length
   end
-
 end
